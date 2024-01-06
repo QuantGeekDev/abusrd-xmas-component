@@ -13,7 +13,7 @@ const Gift = (): React.ReactElement => {
   const [isScratching, setIsScratching] = useState(false);
   const [scratchedArea, setScratchedArea] = useState(0); 
   const [firstNotification, setFirstNotification] = useState(0); 
-
+  const [isCanvasLoaded, setIsCanvasLoaded] = useState(false); 
   
 
   const handleFishClick = () =>{
@@ -100,6 +100,7 @@ const Gift = (): React.ReactElement => {
     giftBoxImage.src = '/images/giftBox.png';
     giftBoxImage.onload = () => {
       canvasContext?.drawImage(giftBoxImage, 0, 0, canvas!.width, canvas!.height);
+      setIsCanvasLoaded(true)
     }
   }, []);
 
@@ -137,8 +138,8 @@ const Gift = (): React.ReactElement => {
         onTouchEnd={handleTouchEnd}
         onTouchMove={handleTouchMove}
       ></canvas>
-      <img className="gift__blowfish" src="/images/blowfish.png" ref={blowfishRef} onClick={handleFishClick} />
-
+      {isCanvasLoaded && <img className="gift__blowfish" src="/images/blowfish.png" ref={blowfishRef} onClick={handleFishClick} />
+}
         {kisses.map((kiss, kissIndex) => (
         <Kiss
           key={kissIndex}
