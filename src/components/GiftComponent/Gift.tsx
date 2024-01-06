@@ -58,7 +58,7 @@ const Gift = (): React.ReactElement => {
 
   const handleTouchMove = (event: React.TouchEvent) => {
     event.preventDefault()
-    const scratchAreaSize = 25
+    const scratchAreaSize = 55
     if (!isScratching || !canvasReference.current) return;
 
     const canvasContext = canvasReference.current.getContext('2d');
