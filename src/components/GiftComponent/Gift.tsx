@@ -14,6 +14,8 @@ const Gift = (): React.ReactElement => {
   const [scratchedArea, setScratchedArea] = useState(0); 
   const [firstNotification, setFirstNotification] = useState(0); 
 
+  
+
   const handleFishClick = () =>{
     if(!blowfishRef.current){
       return
@@ -30,22 +32,56 @@ const Gift = (): React.ReactElement => {
   const canvasReference = useRef<HTMLCanvasElement>(null);
   const blowfishRef = useRef<HTMLImageElement>(null)
 
-  const handleMouseDown = () => {
+  const handleMouseDown = () => 
+  {
+
     setIsScratching(true);
   };
+
 
   const handleMouseUp = () => {
     setIsScratching(false);
   };
+  
+  const handleTouchStart = (event: React.TouchEvent<HTMLCanvasElement>) => {
+    event.preventDefault(); 
+    handleMouseDown();
+  };
 
-  const handleMouseMove = (event: React.MouseEvent) => {
+  const handleTouchEnd = (event: React.TouchEvent<HTMLCanvasElement>) => {
+    event.preventDefault(); 
+    handleMouseUp();
+  };
+
+
+  const handleTouchMove = (event: React.TouchEvent) => {
+    event.preventDefault()
+    const scratchAreaSize = 25
+    if (!isScratching || !canvasReference.current) return;
+
+    const canvasContext = canvasReference.current.getContext('2d');
+    if (canvasContext) {
+      const touch = event.touches[0];
+      const rect = canvasReference.current.getBoundingClientRect();
+      const xPosition = touch.clientX - rect.left;
+      const yPosition = touch.clientY - rect.top;
+      canvasContext.globalCompositeOperation = 'destination-out';
+      canvasContext.rect(xPosition, yPosition, 5, 5);
+      canvasContext.fill();
+      setScratchedArea(previousArea => previousArea + scratchAreaSize); 
+    }
+  };
+
+  const handleMouseMove = (event: React.MouseEvent ) => {
+
     const scratchTraceHeight = 5;
     const scratchTraceWidth = 5;
     if (!isScratching || !canvasReference.current) return;
 
     const canvasContext = canvasReference.current.getContext('2d');
-    if (canvasContext) {
+    if (canvasContext && event) {
       const rect = canvasReference.current.getBoundingClientRect();
+     
       const xPosition = event.clientX - rect.left;
       const yPosition = event.clientY - rect.top;
       canvasContext.globalCompositeOperation = 'destination-out';
@@ -97,6 +133,9 @@ const Gift = (): React.ReactElement => {
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseUp} 
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchMove={handleTouchMove}
       ></canvas>
       <img className="gift__blowfish" src="/images/blowfish.png" ref={blowfishRef} onClick={handleFishClick} />
 
