@@ -13,6 +13,8 @@ const Gift = (): React.ReactElement => {
   const [isScratching, setIsScratching] = useState(false);
   const [scratchedArea, setScratchedArea] = useState(0); 
   const [firstNotification, setFirstNotification] = useState(0); 
+    const [secondNotification, setsecondNotification] = useState(0); 
+
   const [isCanvasLoaded, setIsCanvasLoaded] = useState(false); 
   
 
@@ -56,7 +58,7 @@ const Gift = (): React.ReactElement => {
 
   const handleTouchMove = (event: React.TouchEvent) => {
     event.preventDefault()
-    const scratchAreaSize = 25
+    const scratchAreaSize = 55
     if (!isScratching || !canvasReference.current) return;
 
     const canvasContext = canvasReference.current.getContext('2d');
@@ -105,7 +107,7 @@ const Gift = (): React.ReactElement => {
   }, []);
 
  useEffect(() => {
-  const percentageScratchedThreshold = 1.2
+  const percentageScratchedThreshold = 0.8
   if(!canvasReference.current!.width && canvasReference.current!.height ){
     return
   }
@@ -116,12 +118,13 @@ const Gift = (): React.ReactElement => {
           toast.warn("You're almost there. Keep scratching")
     
     }
-    if (totalArea && (scratchedArea / totalArea) >= percentageScratchedThreshold) {
+    if (totalArea && (scratchedArea / totalArea) >= percentageScratchedThreshold && !secondNotification) {
       canvasReference.current!.style.display = 'none';
+      setsecondNotification(1)
       toast.success("Nice! Now click the blowfish. Nothing should happen...")
     
     }
-  }, [scratchedArea, firstNotification]);
+  }, [scratchedArea, secondNotification, firstNotification]);
 
   return (
     <GiftStyled className="gift" >

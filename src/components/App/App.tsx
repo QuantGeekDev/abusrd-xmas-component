@@ -7,7 +7,7 @@ const App = () =>{
   return <AppStyled className="app">
   <ToastContainer/>
   <span className="app__tag">You have a gift! </span>
-  <span className="app__tag">Scratch it to see what's inside... </span>
+  <span className="app__tag">Scratch ALL of it to be surprised... </span>
     <Gift/>
   </AppStyled>
 }
