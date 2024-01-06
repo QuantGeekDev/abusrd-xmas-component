@@ -1,15 +1,38 @@
 import { useRef, useState, useEffect } from "react";
 import GiftStyled from "./GiftStyled";
 import { toast } from "react-toastify";
+import Kiss from "../Kiss/Kiss";
 
 const Gift = (): React.ReactElement => {
+  interface KissPosition{
+    x: number,
+    y: number
+  }
+  
+  const [kisses, setKisses] = useState<KissPosition[]>([] as KissPosition[]); 
   const [isScratching, setIsScratching] = useState(false);
   const [scratchedArea, setScratchedArea] = useState(0); 
-   const [firstNotification, setFirstNotification] = useState(0); 
+  const [firstNotification, setFirstNotification] = useState(0); 
 
+  const handleFishClick = () =>{
+    if(!blowfishRef.current){
+      return
+    } 
+  const boundary = blowfishRef.current.getBoundingClientRect()
+  if(!boundary){
+    return
+  }  
+  const mouthPosition = {
+      x: boundary.left ,
+      y: boundary.top 
+    };
+  setKisses([...kisses, mouthPosition]);
+  
+};
 
   const giftReference = useRef<HTMLDivElement>(null);
   const canvasReference = useRef<HTMLCanvasElement>(null);
+  const blowfishRef = useRef<HTMLImageElement>(null)
 
   const handleMouseDown = () => {
     setIsScratching(true);
@@ -49,7 +72,7 @@ const Gift = (): React.ReactElement => {
   }, []);
 
  useEffect(() => {
-  const percentageScratchedThreshold = 1.5
+  const percentageScratchedThreshold = 1.2
   if(!canvasReference.current!.width && canvasReference.current!.height ){
     return
   }
@@ -79,7 +102,18 @@ const Gift = (): React.ReactElement => {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseUp} 
       ></canvas>
-      <img className="gift__blowfish" src="/images/blowfish.png" onClick={()=>alert("Si pulsas el pez globo pasan cosetes...")} />
+      <img className="gift__blowfish" src="/images/blowfish.png" ref={blowfishRef} onClick={handleFishClick} />
+
+        {kisses.map((kiss, kissIndex) => (
+        <Kiss
+          key={kissIndex}
+          startX={kiss.x}
+          startY={kiss.y}
+          onComplete={() => {
+            setKisses((currentKisses) => currentKisses.filter((_, currentIndex) => currentIndex !== kissIndex));
+          }}
+        />
+      ))}
     </GiftStyled>
   );
 };
