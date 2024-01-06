@@ -1,7 +1,7 @@
 import styled from "styled-components"
 
 const GiftFrameStyled = styled.div`
-background-color: #fff;
+background-color: #000;
 display: flex;
 align-items: center;
 justify-content: center;
