@@ -1,8 +1,12 @@
 import { useRef, useState, useEffect } from "react";
 import GiftStyled from "./GiftStyled";
+import { toast } from "react-toastify";
 
 const Gift = (): React.ReactElement => {
   const [isScratching, setIsScratching] = useState(false);
+  const [scratchedArea, setScratchedArea] = useState(0); 
+   const [firstNotification, setFirstNotification] = useState(0); 
+
 
   const giftReference = useRef<HTMLDivElement>(null);
   const canvasReference = useRef<HTMLCanvasElement>(null);
@@ -28,7 +32,9 @@ const Gift = (): React.ReactElement => {
       canvasContext.globalCompositeOperation = 'destination-out';
       canvasContext.rect(xPosition, yPosition, scratchTraceHeight, scratchTraceWidth); 
       canvasContext.fill();
+      setScratchedArea(previousArea => previousArea + (scratchTraceHeight * scratchTraceWidth));
     }
+
   };
 
  useEffect(() => {
@@ -42,6 +48,24 @@ const Gift = (): React.ReactElement => {
     }
   }, []);
 
+ useEffect(() => {
+  const percentageScratchedThreshold = 1.5
+  if(!canvasReference.current!.width && canvasReference.current!.height ){
+    return
+  }
+    const totalArea = canvasReference.current!.width * canvasReference.current!.height;
+
+        if (totalArea && (scratchedArea / totalArea) >= (percentageScratchedThreshold/2) && !firstNotification) {
+          setFirstNotification(1)
+          toast.warn("You're almost there. Keep scratching")
+    
+    }
+    if (totalArea && (scratchedArea / totalArea) >= percentageScratchedThreshold) {
+      canvasReference.current!.style.display = 'none';
+      toast.success("Nice! Now click the blowfish. Nothing should happen...")
+    
+    }
+  }, [scratchedArea, firstNotification]);
 
   return (
     <GiftStyled className="gift" ref={giftReference}>
@@ -55,7 +79,7 @@ const Gift = (): React.ReactElement => {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseUp} 
       ></canvas>
-      <img className="gift__blowfish" src="/images/blowfish.png" />
+      <img className="gift__blowfish" src="/images/blowfish.png" onClick={()=>alert("Si pulsas el pez globo pasan cosetes...")} />
     </GiftStyled>
   );
 };
