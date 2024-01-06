@@ -105,7 +105,7 @@ const Gift = (): React.ReactElement => {
   }, []);
 
  useEffect(() => {
-  const percentageScratchedThreshold = 1.2
+  const percentageScratchedThreshold = 0.8
   if(!canvasReference.current!.width && canvasReference.current!.height ){
     return
   }
