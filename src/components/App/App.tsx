@@ -1,6 +1,10 @@
+import GiftComponent from "../GiftComponent/GiftComponent"
+import AppStyled from "./AppStyled"
+
 const App = () =>{
-  return <main>
+  return <AppStyled>
     <div> Hello World</div>
-  </main>
+    <GiftComponent/>
+  </AppStyled>
 }
 export default App

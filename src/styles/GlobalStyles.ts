@@ -8,6 +8,9 @@ const GlobalStyles = createGlobalStyle`
 
 html {
   line-height: 1.15; 
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  color: #fff;
+  font-size: 2rem;
 }
 
 
