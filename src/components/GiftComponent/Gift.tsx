@@ -36,7 +36,6 @@ const Gift = (): React.ReactElement => {
 
   const handleMouseDown = () => 
   {
-
     setIsScratching(true);
   };
 
@@ -58,7 +57,7 @@ const Gift = (): React.ReactElement => {
 
   const handleTouchMove = (event: React.TouchEvent) => {
     event.preventDefault()
-    const scratchAreaSize = 55
+    const scratchAreaSize = 125
     if (!isScratching || !canvasReference.current) return;
 
     const canvasContext = canvasReference.current.getContext('2d');
@@ -68,7 +67,7 @@ const Gift = (): React.ReactElement => {
       const xPosition = touch.clientX - rect.left;
       const yPosition = touch.clientY - rect.top;
       canvasContext.globalCompositeOperation = 'destination-out';
-      canvasContext.rect(xPosition, yPosition, 5, 5);
+      canvasContext.ellipse(xPosition, yPosition, 2, 2, 0, 0, Math.PI*2);
       canvasContext.fill();
       setScratchedArea(previousArea => previousArea + scratchAreaSize); 
     }
@@ -76,8 +75,8 @@ const Gift = (): React.ReactElement => {
 
   const handleMouseMove = (event: React.MouseEvent ) => {
 
-    const scratchTraceHeight = 5;
-    const scratchTraceWidth = 5;
+    const scratchTraceHeight = 2;
+    const scratchTraceWidth = 2;
     if (!isScratching || !canvasReference.current) return;
 
     const canvasContext = canvasReference.current.getContext('2d');
@@ -87,8 +86,7 @@ const Gift = (): React.ReactElement => {
       const xPosition = event.clientX - rect.left;
       const yPosition = event.clientY - rect.top;
       canvasContext.globalCompositeOperation = 'destination-out';
-      canvasContext.rect(xPosition, yPosition, scratchTraceHeight, scratchTraceWidth); 
-      canvasContext.fill();
+     canvasContext.ellipse(xPosition, yPosition, scratchTraceHeight, scratchTraceWidth, 0, 0, Math.PI);      canvasContext.fill();
       setScratchedArea(previousArea => previousArea + (scratchTraceHeight * scratchTraceWidth));
     }
 
@@ -113,7 +111,7 @@ const Gift = (): React.ReactElement => {
   }
     const totalArea = canvasReference.current!.width * canvasReference.current!.height;
 
-        if (totalArea && (scratchedArea / totalArea) >= (percentageScratchedThreshold/2) && !firstNotification) {
+        if (totalArea && ((scratchedArea / totalArea)*0.75) >= (percentageScratchedThreshold/2) && !firstNotification) {
           setFirstNotification(1)
           toast.warn("You're almost there. Keep scratching")
     
@@ -121,7 +119,7 @@ const Gift = (): React.ReactElement => {
     if (totalArea && (scratchedArea / totalArea) >= percentageScratchedThreshold && !secondNotification) {
       canvasReference.current!.style.display = 'none';
       setsecondNotification(1)
-      toast.success("Nice! Now click the blowfish. Nothing should happen...")
+      toast.success("Nice! Now click the blowfish.")
     
     }
   }, [scratchedArea, secondNotification, firstNotification]);
