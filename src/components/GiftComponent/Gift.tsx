@@ -43,12 +43,12 @@ const Gift = (): React.ReactElement => {
     setIsScratching(false);
   };
   
-  const handleTouchStart = (event: React.TouchEvent<HTMLCanvasElement>) => {
+  const handleTouchStart = (event: React.TouchEvent) => {
     event.preventDefault(); 
     handleMouseDown();
   };
 
-  const handleTouchEnd = (event: React.TouchEvent<HTMLCanvasElement>) => {
+  const handleTouchEnd = (event: React.TouchEvent) => {
     event.preventDefault(); 
     handleMouseUp();
   };

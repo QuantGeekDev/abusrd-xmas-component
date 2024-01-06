@@ -12,7 +12,9 @@ const GiftStyled = styled.div`
     &__canvas {
       position: absolute;
       z-index: 2;
+      touch-action: none;
     }
+
     
     &__blowfish {
       position: relative;
