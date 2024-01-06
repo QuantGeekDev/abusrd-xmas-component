@@ -18,19 +18,15 @@ const Gift = (): React.ReactElement => {
     if(!blowfishRef.current){
       return
     } 
-  const boundary = blowfishRef.current.getBoundingClientRect()
-  if(!boundary){
-    return
-  }  
+
   const mouthPosition = {
-      x: boundary.left ,
-      y: boundary.top 
+      x: blowfishRef.current.height-5,
+      y: blowfishRef.current.width+45,
     };
   setKisses([...kisses, mouthPosition]);
   
 };
 
-  const giftReference = useRef<HTMLDivElement>(null);
   const canvasReference = useRef<HTMLCanvasElement>(null);
   const blowfishRef = useRef<HTMLImageElement>(null)
 
@@ -91,7 +87,7 @@ const Gift = (): React.ReactElement => {
   }, [scratchedArea, firstNotification]);
 
   return (
-    <GiftStyled className="gift" ref={giftReference}>
+    <GiftStyled className="gift" >
       <canvas
         ref={canvasReference}
         className="gift__canvas"
